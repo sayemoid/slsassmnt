@@ -1,12 +1,12 @@
 package dev.sayem.selis.domains.account.controllers;
 
-import dev.sayem.selis.domains.account.models.dtos.AccountDetailResponse;
-import dev.sayem.selis.domains.account.models.dtos.AccountReq;
-import dev.sayem.selis.domains.account.models.dtos.TransferReq;
-import dev.sayem.selis.domains.account.models.dtos.TransferResponse;
+import dev.sayem.selis.domains.account.models.dtos.requests.AccountReq;
+import dev.sayem.selis.domains.account.models.dtos.requests.TransferReq;
+import dev.sayem.selis.domains.account.models.dtos.responses.AccountDetailResponse;
+import dev.sayem.selis.domains.account.models.dtos.responses.TransferResponse;
 import dev.sayem.selis.domains.account.services.AccountService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -23,7 +23,7 @@ public class AccountController {
 
 	@PostMapping("")
 	ResponseEntity<AccountDetailResponse> create(
-			@Validated @RequestBody AccountReq accountReq
+			@Valid @RequestBody AccountReq accountReq
 	) {
 		var account = accountReq.toCustomerAccount(null);
 		account = this.accountService.save(account);
@@ -40,7 +40,7 @@ public class AccountController {
 
 	@PatchMapping("/transfer")
 	ResponseEntity<TransferResponse> transfer(
-			@RequestBody TransferReq req
+			@Valid @RequestBody TransferReq req
 	) {
 		var tnx = this.accountService.transferBalance(req.senderAccount(), req.receiverAccount(), req.amount());
 		return ResponseEntity.ok(new TransferResponse(tnx));

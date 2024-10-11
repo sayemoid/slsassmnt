@@ -5,7 +5,7 @@ import dev.sayem.selis.base.ValidationScope;
 import dev.sayem.selis.base.ValidationUtils;
 import dev.sayem.selis.domains.account.enums.AccountStatus;
 import dev.sayem.selis.domains.account.models.entities.Account;
-import dev.sayem.selis.domains.account.repositories.CustomerAccountRepository;
+import dev.sayem.selis.domains.account.repositories.AccountRepository;
 import dev.sayem.selis.exceptions.NonExistentException;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
@@ -19,9 +19,9 @@ import java.util.function.Function;
 @Service
 public class AccountServiceImpl implements AccountService {
 
-	private final CustomerAccountRepository accountRepository;
+	private final AccountRepository accountRepository;
 
-	public AccountServiceImpl(CustomerAccountRepository accountRepository) {
+	public AccountServiceImpl(AccountRepository accountRepository) {
 		this.accountRepository = accountRepository;
 	}
 

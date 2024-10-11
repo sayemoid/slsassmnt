@@ -1,4 +1,4 @@
-package dev.sayem.selis.domains.account.models.dtos;
+package dev.sayem.selis.domains.account.models.dtos.responses;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dev.sayem.selis.domains.account.enums.AccountStatus;

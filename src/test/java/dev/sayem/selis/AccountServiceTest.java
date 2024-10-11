@@ -1,7 +1,7 @@
 package dev.sayem.selis;
 
 import dev.sayem.selis.domains.account.models.entities.Account;
-import dev.sayem.selis.domains.account.repositories.CustomerAccountRepository;
+import dev.sayem.selis.domains.account.repositories.AccountRepository;
 import dev.sayem.selis.domains.account.services.AccountServiceImpl;
 import dev.sayem.selis.exceptions.ValidationException;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,7 +17,7 @@ import static org.mockito.Mockito.*;
 class AccountServiceTest {
 
 	@Mock
-	private CustomerAccountRepository accountRepository;
+	private AccountRepository accountRepository;
 
 	private AccountServiceImpl accountService;
 
