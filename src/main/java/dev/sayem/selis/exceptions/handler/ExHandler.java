@@ -30,7 +30,7 @@ public class ExHandler {
 		);
 	}
 
-	@ExceptionHandler(NonExistentException.class)
+	@ExceptionHandler(RuntimeException.class)
 	ResponseEntity<ErrorResponse> handleRuntimeException(RuntimeException ex) {
 		return buildResponse(
 				HttpStatus.INTERNAL_SERVER_ERROR,
