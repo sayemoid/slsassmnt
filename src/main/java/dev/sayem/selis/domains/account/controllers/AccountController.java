@@ -1,5 +1,6 @@
 package dev.sayem.selis.domains.account.controllers;
 
+import dev.sayem.selis.domains.account.enums.AccountStatus;
 import dev.sayem.selis.domains.account.models.dtos.requests.AccountReq;
 import dev.sayem.selis.domains.account.models.dtos.requests.TransferReq;
 import dev.sayem.selis.domains.account.models.dtos.responses.AccountDetailResponse;
@@ -27,6 +28,15 @@ public class AccountController {
 	) {
 		var account = accountReq.toCustomerAccount(null);
 		account = this.accountService.save(account);
+		return ResponseEntity.ok(AccountDetailResponse.from(account));
+	}
+
+	@PatchMapping("/{accountNumber}/activate")
+	ResponseEntity<AccountDetailResponse> toggleActivation(
+			@PathVariable String accountNumber,
+			@RequestParam AccountStatus status
+	) {
+		var account = this.accountService.changeStatus(accountNumber, status);
 		return ResponseEntity.ok(AccountDetailResponse.from(account));
 	}
 

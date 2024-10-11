@@ -42,6 +42,16 @@ public class AccountServiceImpl implements AccountService {
 				.orElseThrow(() -> new NonExistentException("Account doesn't exist for account number: " + accountNumber));
 	}
 
+	@Override
+	public Account changeStatus(String accountNumber, AccountStatus status) {
+		return this.accountRepository.findByAccountNumber(accountNumber)
+				.map(account -> {
+					account.setAccountStatus(status);
+					return accountRepository.save(account);
+				})
+				.orElseThrow(() -> new NonExistentException("Account doesn't exist for accountNumber: " + accountNumber));
+	}
+
 	@Transactional
 	@Override
 	public String transferBalance(String senderAccNumber, String receiverAccNumber, BigDecimal amount) {
