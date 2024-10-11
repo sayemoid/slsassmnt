@@ -62,6 +62,20 @@ Example Error Response ()
     "message": "Account number must be unique",
     "exception": {...} // only throws in debug mode
 ```
+## Activate Account
+Endpoint: `/accounts/{accountNumber}/activate?status={ACTIVE/INACTIVE}`
+Response: 
+```json
+{
+    "account_number": "XYZANK02857335",
+    "full_name": "John Doe",
+    "birth_date": "1990-10-11T15:32:48.942Z",
+    "account_type": "PREMIUM",
+    "account_status": "ACTIVE",
+    "balance": 0.0000,
+    "last_tnx_date": null
+}
+```
 
 ## Get Account Details
 Endpoint: `/api/v1/accounts/XYZANK02857335`
