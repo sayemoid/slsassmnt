@@ -9,7 +9,7 @@ import dev.sayem.selis.exceptions.NonExistentException;
 import java.math.BigDecimal;
 import java.time.Instant;
 
-public record CustomerAccountDetail(
+public record AccountDetail(
 		@JsonProperty("account_number")
 		String accountNumber,
 
@@ -31,9 +31,9 @@ public record CustomerAccountDetail(
 		@JsonProperty("last_tnx_date")
 		Instant lastTnxDate
 ) {
-	public static CustomerAccountDetail from(Account account) {
+	public static AccountDetail from(Account account) {
 		if (account == null) throw new NonExistentException(Account.class);
-		return new CustomerAccountDetail(
+		return new AccountDetail(
 				account.getAccountNumber(),
 				account.getFullName(),
 				account.getBirthDate(),

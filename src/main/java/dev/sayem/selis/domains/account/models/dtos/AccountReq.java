@@ -8,7 +8,7 @@ import dev.sayem.selis.domains.account.models.entities.Account;
 import java.math.BigDecimal;
 import java.time.Instant;
 
-public record CustomerAccountReq(
+public record AccountReq(
 		@JsonProperty("account_number")
 		String accountNumber,
 		@JsonProperty("full_name")
@@ -19,7 +19,7 @@ public record CustomerAccountReq(
 		AccountType accountType
 ) {
 
-	Account toCustomerAccount(
+	public Account toCustomerAccount(
 			Account existing
 	) {
 		var account = existing != null ? existing : new Account();

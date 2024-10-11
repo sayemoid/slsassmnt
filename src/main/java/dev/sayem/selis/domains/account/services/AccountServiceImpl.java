@@ -21,11 +21,15 @@ public class AccountServiceImpl implements AccountService {
 		this.accountRepository = accountRepository;
 	}
 
-
 	@Override
 	public Account save(Account account) {
 		applyValidations(account);
-		return new Account();
+		return this.accountRepository.save(account);
+	}
+
+	@Override
+	public Account find(Long id) {
+		return this.accountRepository.find(id).orElse(null);
 	}
 
 	@Override
