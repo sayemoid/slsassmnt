@@ -6,6 +6,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -34,6 +35,15 @@ public class ExHandler {
 
 	@ExceptionHandler(ValidationException.class)
 	ResponseEntity<ErrorResponse> handleValidationException(ValidationException ex) {
+		return buildResponse(
+				HttpStatus.BAD_REQUEST,
+				ex,
+				null
+		);
+	}
+
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
 		return buildResponse(
 				HttpStatus.BAD_REQUEST,
 				ex,
