@@ -3,12 +3,16 @@ package dev.sayem.selis.domains.account.services;
 import dev.sayem.selis.base.Validation;
 import dev.sayem.selis.base.ValidationScope;
 import dev.sayem.selis.base.ValidationUtils;
+import dev.sayem.selis.domains.account.enums.AccountStatus;
 import dev.sayem.selis.domains.account.models.entities.Account;
 import dev.sayem.selis.domains.account.repositories.CustomerAccountRepository;
 import dev.sayem.selis.exceptions.NonExistentException;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.security.SecureRandom;
 import java.util.Set;
 import java.util.function.Function;
 
@@ -38,6 +42,40 @@ public class AccountServiceImpl implements AccountService {
 				.orElseThrow(() -> new NonExistentException("Account doesn't exist for account number: " + accountNumber));
 	}
 
+	@Transactional
+	@Override
+	public String transferBalance(String senderAccNumber, String receiverAccNumber, BigDecimal amount) {
+		var senderAccount = this.accountRepository.findByAccountNumber(senderAccNumber)
+				.orElseThrow(() -> new NonExistentException("Account doesn't exist for account number: " + senderAccNumber));
+		var receiverAccount = this.accountRepository.findByAccountNumber(receiverAccNumber)
+				.orElseThrow(() -> new NonExistentException("Account doesn't exist for account number: " + receiverAccNumber));
+
+		// Apply validations for sender
+		Set.of(
+				AccountValidations.transferAmountShouldNotExceedBalance(amount),
+				AccountValidations.accountShouldBeActive()
+		).forEach(accountValidation -> {
+			accountValidation.apply(senderAccount, ValidationScope.MODIFY);
+		});
+
+		// Apply validations for receiver
+		Set.of(
+				AccountValidations.accountShouldBeActive()
+		).forEach(v -> v.apply(receiverAccount, ValidationScope.MODIFY));
+
+		senderAccount.setBalance(senderAccount.getBalance().subtract(amount));
+		receiverAccount.setBalance(receiverAccount.getBalance().add(amount));
+
+		this.accountRepository.save(senderAccount);
+		this.accountRepository.save(receiverAccount);
+		/*
+		Ideally there should be a transaction table where this transaction details would be saved and
+		tnx it would be returned.
+		For now sending a random number as tnx id.
+		 */
+		return String.valueOf(100000 + new SecureRandom().nextInt(89999));
+	}
+
 	@Override
 	public Set<Validation<Account>> validations() {
 		return Set.of(
@@ -65,6 +103,24 @@ class AccountValidations {
 					var existing = getAccount.apply(account.getAccountNumber());
 					return ValidationUtils.validateUniqueOperation(existing, account);
 				})
+		);
+	}
+
+	static Validation<Account> transferAmountShouldNotExceedBalance(BigDecimal amount) {
+		return ValidationUtils.genericValidation(
+				"Transfer amount exceeds account balance",
+				Set.of(ValidationScope.MODIFY),
+				null,
+				(account) -> account.getBalance().subtract(amount).doubleValue() > 0
+		);
+	}
+
+	static Validation<Account> accountShouldBeActive() {
+		return ValidationUtils.genericValidation(
+				"Account should be active to do transacton.",
+				Set.of(ValidationScope.MODIFY),
+				null,
+				account -> AccountStatus.ACTIVE.equals(account.getAccountStatus())
 		);
 	}
 }

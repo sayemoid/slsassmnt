@@ -5,7 +5,7 @@ import dev.sayem.selis.domains.account.enums.AccountType;
 import dev.sayem.selis.domains.account.models.entities.Account;
 import dev.sayem.selis.exceptions.NonExistentException;
 
-public record CustomerAccountBrief(
+public record AccountBriefResponse(
 		@JsonProperty("account_number")
 		String accountNumber,
 		@JsonProperty("full_name")
@@ -13,9 +13,9 @@ public record CustomerAccountBrief(
 		@JsonProperty("account_type")
 		AccountType accountType
 ) {
-	CustomerAccountBrief from(Account account) {
+	AccountBriefResponse from(Account account) {
 		if (account == null) throw new NonExistentException(Account.class);
-		return new CustomerAccountBrief(
+		return new AccountBriefResponse(
 				account.getAccountNumber(),
 				account.getFullName(),
 				account.getAccountType()
