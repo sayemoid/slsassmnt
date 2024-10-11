@@ -19,6 +19,9 @@
 `GRANT ALL PRIVILEGES ON client_db.* TO 'selis_user'@'localhost';`
 `FLUSH PRIVILEGES;`
 
+### When project runs, it'll automatically run the migration script located in `src/main/resources/db/migration` 
+
+
 # Application
 
 - clone project from github
