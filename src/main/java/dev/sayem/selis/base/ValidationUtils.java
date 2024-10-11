@@ -1,5 +1,7 @@
 package dev.sayem.selis.base;
 
+import dev.sayem.selis.exceptions.ValidationException;
+
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -17,7 +19,7 @@ public class ValidationUtils {
 				if (exception != null) {
 					throw exception;
 				} else {
-					throw new RuntimeException(message != null ? message : data + " is invalid");
+					throw new ValidationException(message != null ? message : data + " is invalid");
 				}
 			}
 		};

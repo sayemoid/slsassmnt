@@ -1,6 +1,7 @@
 package dev.sayem.selis.exceptions.handler;
 
 import dev.sayem.selis.exceptions.NonExistentException;
+import dev.sayem.selis.exceptions.ValidationException;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -25,6 +26,16 @@ public class ExHandler {
 	ResponseEntity<ErrorResponse> handleNotExistsException(NonExistentException ex) {
 		return buildResponse(
 				HttpStatus.NOT_FOUND,
+				ex,
+				null
+		);
+	}
+
+
+	@ExceptionHandler(ValidationException.class)
+	ResponseEntity<ErrorResponse> handleValidationException(ValidationException ex) {
+		return buildResponse(
+				HttpStatus.BAD_REQUEST,
 				ex,
 				null
 		);
